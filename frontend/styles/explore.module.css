@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom crimson colors */
+@layer utilities {
+  .bg-crimson-50 { background-color: #fff0f0; }
+  .bg-crimson-600 { background-color: #dc143c; }
+  .bg-crimson-700 { background-color: #a8102a; }
+  .text-crimson-700 { color: #a8102a; }
+  .border-crimson-600 { border-color: #dc143c; }
+  .hover\:bg-crimson-700:hover { background-color: #a8102a; }
+}
+
+/* Background */
+.bg {
+  background-color: #fff0f0;
+  background-image: url('/BG.JPG'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* Form inputs and selects */
+.input,
+.select {
+  @apply w-full px-4 py-2 border-2 border-b-4 border-gray-300 rounded-lg focus:ring-2 focus:ring-crimson-600 focus:border-b-2 transition-all duration-200;
+}
+
+/* Submit button */
+.button {
+  @apply w-full bg-crimson-600 hover:bg-crimson-700 text-white font-medium py-3 px-4 rounded-lg transition-transform transform hover:scale-105 shadow-lg hover:shadow-xl;
+}
+
+/* Card layout */
+.card {
+  @apply bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-6 flex flex-col md:flex-row gap-6 transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg;
+}

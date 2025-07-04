@@ -1,0 +1,76 @@
+# ======================================================
+# 📦 Node / Yarn / npm
+# ======================================================
+node_modules/
+.pnp/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ======================================================
+# 🚀 Next.js
+# ======================================================
+.next/
+out/
+build/
+.vercel/
+dist/
+next-env.d.ts
+
+# ======================================================
+# 🧪 Testing
+# ======================================================
+coverage/
+*.test.*
+*.spec.*
+
+# ======================================================
+# 🐍 Python (Flask Backend)
+# ======================================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+backend/venv/
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.onnx
+
+# Optional: model & dataset folders (Uncomment if not versioning)
+# backend/models/
+# backend/data/
+
+# ======================================================
+# 🧬 Environment & Secrets
+# ======================================================
+.env
+.env.*
+!.env.example
+
+# ======================================================
+# 💡 VSCode / OS / Misc
+# ======================================================
+.DS_Store
+Thumbs.db
+*.log
+*.tsbuildinfo
+*.sqlite3
+*.db
+*.pem
+*.ipynb
+*.ipynb_checkpoints/
+
+# ======================================================
+# 🛠 Debugging
+# ======================================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
