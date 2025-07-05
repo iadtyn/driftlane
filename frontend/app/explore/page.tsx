@@ -126,19 +126,19 @@ export default function Explore() {
             <img
               src="logo.png"
               alt="Driftline Logo"
-              className="w-15 h-15 object-contain"
+              className="w-15 h-15 object-contain text-focus-in"
             />
-            <h1 className="text-5xl bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text drop-shadow font-bold">
+            <h1 className="text-5xl bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text drop-shadow font-bold text-focus-in">
               Driftline
             </h1>
           </div>
-          <p className="text-white/80 text-lg mt-2 font-light max-w-2xl mx-auto">
+          <p className="text-white/80 text-lg mt-2 font-light max-w-2xl mx-auto text-focus-in">
             Discover your next adventure – curated camps & treks based on your vibe.
           </p>
         </header>
 
         <main className="px-4 sm:px-6 lg:px-8 py-10 max-w-5xl mx-auto w-full">
-            <form onSubmit={handleSubmit} className="bg-white/10 p-6 rounded-xl shadow-md space-y-6 mb-12 backdrop-blur-sm">
+            <form onSubmit={handleSubmit} className="bg-white/10 p-6 rounded-xl shadow-md space-y-6 mb-12 backdrop-blur-sm text-focus-in">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
               {/* Mood Input */}
               <div>
