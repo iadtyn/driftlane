@@ -100,5 +100,4 @@ npm run dev
 
 ## 🧑‍💻 Author
 
-Made with ❤️ by [@omkarr10](https://github.com/omkarr10) & [@4aditya](https://github.com/4aditya)
-
+Made with ❤️ by [@omkarr10](https://github.com/omkarr10)
