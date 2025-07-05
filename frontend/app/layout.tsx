@@ -1,5 +1,12 @@
 import '../styles/globals.css';
 import { ReactNode } from 'react';
+import { Prompt } from 'next/font/google';
+
+const prompt = Prompt({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  display: 'swap',
+});
 
 export const metadata = {
   title: 'Driftline',
@@ -18,14 +25,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
-
-        {/* Google Fonts */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;700&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body className="bg-gray-50 text-gray-800 font-sans">
+      <body className={`${prompt.className} bg-gray-50 text-gray-800`}>
         <main className="min-h-screen">{children}</main>
       </body>
     </html>
