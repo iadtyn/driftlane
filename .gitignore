@@ -37,7 +37,7 @@ __pycache__/
 venv/
 env/
 backend/venv/
-*.pkl
+
 *.joblib
 *.h5
 *.pt
