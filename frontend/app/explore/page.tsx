@@ -77,17 +77,16 @@ export default function Explore() {
     const lines = text.trim().split('\n');
     let html = '';
     let inList = false;
-    let lineCount = 0;
 
-    for (const line of lines) {
-      let trimmed = line.trim();
-      if (!trimmed) continue;
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line) continue;
 
-      trimmed = trimmed.replace(/^#+\s*/, '');
-      trimmed = trimmed.replace(/^\*+/, '');
-      trimmed = trimmed.replace(/^\-+/, '');
-      trimmed = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      trimmed = trimmed.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      let trimmed = line
+        .replace(/^#+\s*/, '')
+        .replace(/^[*-]+/, '')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
 
       if (/^day\s*\d+[:\s]/i.test(trimmed)) {
         if (inList) {
@@ -95,19 +94,14 @@ export default function Explore() {
           inList = false;
         }
         html += `<h4 class="font-semibold text-blue-400 mt-4 mb-1">${trimmed}</h4>`;
-        lineCount = 0;
       } else if (/^[-*]\s+/.test(trimmed)) {
-        if (lineCount >= 2) continue;
         if (!inList) {
           html += '<ul class="list-disc ml-5 text-sm">';
           inList = true;
         }
         html += `<li>${trimmed.replace(/^[-*]\s+/, '')}</li>`;
-        lineCount++;
       } else {
-        if (lineCount >= 2) continue;
         html += `<p class="text-sm text-white/80">${trimmed}</p>`;
-        lineCount++;
       }
     }
 
@@ -141,6 +135,7 @@ export default function Explore() {
           </p>
         </header>
 
+       
           <form onSubmit={handleSubmit} className="bg-white/10 p-6 rounded-xl shadow-md space-y-6 mb-12 backdrop-blur-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
               {/* Mood Input */}
@@ -230,7 +225,6 @@ export default function Explore() {
               <i className="fas fa-map-marked-alt mr-2" /> Get Recommendations
             </button>
           </form>
-      
       </div>
 
       <footer className="text-center py-3 bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text mb-2 text-focus-in">
