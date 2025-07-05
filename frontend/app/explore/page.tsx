@@ -42,7 +42,7 @@ export default function Explore() {
     setResults([]);
 
     try {
-      const res = await fetch('http://localhost:5000/api/recommend', {
+      const res = await fetch('https://driftline.onrender.com/api/recommend', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, state: 'all' }),
@@ -298,7 +298,7 @@ export default function Explore() {
                               }));
                             } else {
                               setLoadingItinerary(prev => ({ ...prev, [id]: true }));
-                              const res = await fetch('http://localhost:5000/api/generate-itinerary', {
+                              const res = await fetch('https://driftline.onrender.com/api/generate-itinerary', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
