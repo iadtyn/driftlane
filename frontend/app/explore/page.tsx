@@ -116,7 +116,7 @@ export default function Explore() {
 
   return (
     <div className="relative h-screen font-['Prompt'] flex flex-col text-white">
-      <div className="fixed inset-0 bg-[url('/BG4.JPG')] bg-cover bg-center brightness-75 -z-30" />
+      <div className="fixed inset-0 bg-[url('/BG4.jpg')] bg-cover bg-center brightness-75 -z-30" />
       <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] -z-20" />
 
       <div className="relative z-10 flex-1 overflow-y-auto">
