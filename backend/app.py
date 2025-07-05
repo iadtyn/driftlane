@@ -11,7 +11,10 @@ app = Flask(__name__)
 CORS(
     app,
     resources={r"/api/*": {
-        "origins": "http://localhost:3000",  # frontend port
+        "origins": [
+            "http://localhost:3000",                # for local development
+            "https://driftline-puce.vercel.app"     # for production frontend
+        ],
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type"],
     }},
@@ -24,9 +27,9 @@ app.register_blueprint(llm_bp,      url_prefix="/api")
 # ─── Optional Health Check ──────────────────────────
 @app.route("/", methods=["GET"])
 def index():
-    return " Flask backend is running."
+    return "Flask backend is running."
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    print(f" Flask server running at http://localhost:{port}")
+    print(f"Flask server running at http://localhost:{port}")
     app.run(debug=True, port=port)
