@@ -1,1 +1,7 @@
 *.pkl filter=lfs diff=lfs merge=lfs -text
+models/tfidf_vectorizer.pkl filter=lfs diff=lfs merge=lfs -text
+models/knn_mood_model.pkl filter=lfs diff=lfs merge=lfs -text
+models/recommender_knn.pkl filter=lfs diff=lfs merge=lfs -text
+models/kmeans_cluster.pkl filter=lfs diff=lfs merge=lfs -text
+models/classifier_rf.pkl filter=lfs diff=lfs merge=lfs -text
+models/label_encoders.pkl filter=lfs diff=lfs merge=lfs -text
