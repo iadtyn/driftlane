@@ -142,6 +142,7 @@ export default function Explore() {
         </header>
 
         <main className="px-4 sm:px-6 lg:px-8 py-10 max-w-5xl mx-auto w-full">
+
           
           <form onSubmit={handleSubmit} className="bg-white/10 p-6 rounded-xl shadow-md space-y-6 mb-12 backdrop-blur-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
@@ -269,7 +270,6 @@ export default function Explore() {
                 return (
                   <div key={idx} className="bg-white/10 rounded-xl shadow-md backdrop-blur-sm">
                     <div className="flex flex-col md:flex-row justify-between items-start gap-4 p-6">
-                      {/* Image Grid */}
                       <div className="order-1 md:order-2 md:ml-4 w-full md:w-auto">
                         <div className="grid grid-cols-1 gap-2">
                           {(card.images || []).slice(0, 4).map((img, i) => (
@@ -280,13 +280,11 @@ export default function Explore() {
                               width={400}
                               height={240}
                               className="h-60 w-full object-cover rounded-md shadow"
-                              onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
                             />
                           ))}
                         </div>
                       </div>
 
-                      {/* Details */}
                       <div className="flex-1 order-2 md:order-1">
                         <h3 className="text-xl font-semibold text-white mb-1">{card.title}</h3>
                         <div className="flex justify-between text-sm text-white/70 mb-1">
