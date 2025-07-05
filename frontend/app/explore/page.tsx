@@ -20,7 +20,7 @@ export default function Explore() {
     budget: '',
     group: '',
     type: '',
-    duration: '3', 
+    duration: '3',
   });
 
   const [loading, setLoading] = useState(false);
@@ -59,68 +59,58 @@ export default function Explore() {
       setResults(data);
       const states: string[] = Array.from(new Set(data.map((item: Adventure) => item.state)));
       setAvailableStates(states);
-    } catch (err) {
+    } catch {
       setLoading(false);
       setError('Server error. Try again later.');
     }
   };
 
- const filteredResults = results.filter(r =>
-  (filterState === 'all' || r.state.toLowerCase() === filterState.toLowerCase()) &&
-  (formData.type === '' || r.type.toLowerCase() === formData.type.toLowerCase())
-);
+  const filteredResults = results.filter(r =>
+    (filterState === 'all' || r.state.toLowerCase() === filterState.toLowerCase()) &&
+    (formData.type === '' || r.type.toLowerCase() === formData.type.toLowerCase())
+  );
 
- const formatItinerary = (text: string) => {
-  const lines = text.trim().split('\n');
-  let html = '';
-  let inList = false;
-  let lineCount = 0;
-  let dayCount = 0;
+  const formatItinerary = (text: string) => {
+    const lines = text.trim().split('\n');
+    let html = '';
+    let inList = false;
+    let lineCount = 0;
 
-  for (let line of lines) {
-    let trimmed = line.trim();
-    if (!trimmed) continue;
+    for (const line of lines) {
+      let trimmed = line.trim();
+      if (!trimmed) continue;
 
-    trimmed = trimmed.replace(/^#+\s*/, '');
-    trimmed = trimmed.replace(/^\*+/, '');
-    trimmed = trimmed.replace(/^\-+/, '');
-    trimmed = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    trimmed = trimmed.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      trimmed = trimmed.replace(/^#+\s*/, '');
+      trimmed = trimmed.replace(/^\*+/, '');
+      trimmed = trimmed.replace(/^\-+/, '');
+      trimmed = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      trimmed = trimmed.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-    // Detect Day Heading
-    if (/^day\s*\d+[:\s]/i.test(trimmed)) {
-      if (inList) {
-        html += '</ul>';
-        inList = false;
+      if (/^day\s*\d+[:\s]/i.test(trimmed)) {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        html += `<h4 class="font-semibold text-blue-400 mt-4 mb-1">${trimmed}</h4>`;
+        lineCount = 0;
+      } else if (/^[-*]\s+/.test(trimmed)) {
+        if (lineCount >= 2) continue;
+        if (!inList) {
+          html += '<ul class="list-disc ml-5 text-sm">';
+          inList = true;
+        }
+        html += `<li>${trimmed.replace(/^[-*]\s+/, '')}</li>`;
+        lineCount++;
+      } else {
+        if (lineCount >= 2) continue;
+        html += `<p class="text-sm text-white/80">${trimmed}</p>`;
+        lineCount++;
       }
-      html += `<h4 class="font-semibold text-blue-400 mt-4 mb-1">${trimmed}</h4>`;
-      dayCount++;
-      lineCount = 0;
     }
 
-    // List item
-    else if (/^[-*]\s+/.test(trimmed)) {
-      if (lineCount >= 2) continue;
-      if (!inList) {
-        html += '<ul class="list-disc ml-5 text-sm">';
-        inList = true;
-      }
-      html += `<li>${trimmed.replace(/^[-*]\s+/, '')}</li>`;
-      lineCount++;
-    }
-
-    // Paragraph
-    else {
-      if (lineCount >= 2) continue;
-      html += `<p class="text-sm text-white/80">${trimmed}</p>`;
-      lineCount++;
-    }
-  }
-
-  if (inList) html += '</ul>';
-  return html;
-};
-
+    if (inList) html += '</ul>';
+    return html;
+  };
 
   const currentYear = new Date().getFullYear();
 
@@ -131,25 +121,24 @@ export default function Explore() {
 
       <div className="relative z-10 flex-1 overflow-y-auto">
         <header className="px-4 pt-10 pb-6 text-center">
-  <div className="flex justify-center items-center gap-3 mb-2">
-    <img
-      src="logo.png"
-      alt="Driftline Logo"
-      className="w-15 h-15 object-contain"
-    />
-    <h1 className="text-5xl bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text drop-shadow font-bold">
-      Driftline
-    </h1>
-  </div>
-  <p className="text-white/80 text-lg mt-2 font-light max-w-2xl mx-auto">
-    Discover your next adventure – curated camps & treks based on your vibe.
-  </p>
-</header>
+          <div className="flex justify-center items-center gap-3 mb-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="logo.png"
+              alt="Driftline Logo"
+              className="w-15 h-15 object-contain"
+            />
+            <h1 className="text-5xl bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text drop-shadow font-bold">
+              Driftline
+            </h1>
+          </div>
+          <p className="text-white/80 text-lg mt-2 font-light max-w-2xl mx-auto">
+            Discover your next adventure – curated camps & treks based on your vibe.
+          </p>
+        </header>
 
         <main className="px-4 sm:px-6 lg:px-8 py-10 max-w-5xl mx-auto w-full">
-          
-
-          <form onSubmit={handleSubmit} className="bg-white/10 p-6 rounded-xl shadow-md space-y-6 mb-12 backdrop-blur-sm">
+            <form onSubmit={handleSubmit} className="bg-white/10 p-6 rounded-xl shadow-md space-y-6 mb-12 backdrop-blur-sm">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
               {/* Mood Input */}
               <div>
@@ -259,116 +248,100 @@ export default function Explore() {
           )}
 
           {error && <div className="text-red-300 text-center mb-4">{error}</div>}
+          {filteredResults.length > 0 && (
+            <div className="space-y-10">
+              {filteredResults.map((card, idx) => {
+                const id = card.title.toLowerCase().replace(/\s+/g, '-');
+                const stored = visibleItinerary[id];
 
-         {filteredResults.length > 0 && (
-  <div className="space-y-10">
-    {filteredResults.map((card, idx) => {
-      const id = card.title.toLowerCase().replace(/\s+/g, '-');
-      const stored = visibleItinerary[id];
+                return (
+                  <div key={idx} className="bg-white/10 rounded-xl shadow-md backdrop-blur-sm">
+                    <div className="flex flex-col md:flex-row justify-between items-start gap-4 p-6">
+                      <div className="order-1 md:order-2 md:ml-4 w-full md:w-auto">
+                        <div className="grid grid-cols-1 gap-2">
+                          {(card.images || []).slice(0, 4).map((img, i) => (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              key={i}
+                              src={img}
+                              className="h-60 w-full object-cover rounded-md shadow"
+                              alt={`Image ${i + 1}`}
+                              onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
+                            />
+                          ))}
+                        </div>
+                      </div>
 
-      return (
-        <div key={idx} className="bg-white/10 rounded-xl shadow-md backdrop-blur-sm">
-          <div className="flex flex-col md:flex-row justify-between items-start gap-4 p-6">
-            
-            {/* Image First on Mobile */}
-            <div className="order-1 md:order-2 md:ml-4 w-full md:w-auto">
-              <div className="grid grid-cols-1 gap-2">
-                {(card.images || []).slice(0, 4).map((img, i) => (
-                  <img
-                    key={i}
-                    src={img}
-                    className="h-60 w-full object-cover rounded-md shadow"
-                    alt={`Image ${i + 1}`}
-                    onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
-                  />
-                ) 
-                
-                )}
-              </div>
-            </div>
-             
-            
-            
+                      <div className="flex-1 order-2 md:order-1">
+                        <h3 className="text-xl font-semibold text-white mb-1">{card.title}</h3>
+                        <div className="flex justify-between text-sm text-white/70 mb-1">
+                          <span>Type: <span className="text-red-300">{card.type}</span></span>
+                          <span>{card.state}</span>
+                        </div>
 
-            {/* Text + Button Second on Mobile */}
-            <div className="flex-1 order-2 md:order-1">
-              <h3 className="text-xl font-semibold text-white mb-1">{card.title}</h3>
-              <div className="flex justify-between text-sm text-white/70 mb-1">
-                <span>Type: <span className="text-red-300">{card.type}</span></span>
-                <span>{card.state}</span>
-              </div>
+                        <div className="mb-2">
+                          Ideal For:{' '}
+                          {card.groups.map((g, i) => (
+                            <span key={i} className="inline-block px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs mr-2 mb-1">{g}</span>
+                          ))}
+                        </div>
 
-              <div className="mb-2">
-                Ideal For:{' '}
-                {card.groups.map((g, i) => (
-                  <span key={i} className="inline-block px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs mr-2 mb-1">{g}</span>
-                ))}
-              </div>
+                        <p className="text-sm text-white/80 mb-2"><strong>Budget:</strong> ₹{card.avg_budget_per_day_inr}</p>
+                        <p className="text-sm text-white/80 mb-2"><strong>Best Months:</strong> {card.best_months}</p>
 
-              <p className="text-sm text-white/80 mb-2">
-                <strong>Budget:</strong> ₹{card.avg_budget_per_day_inr}
-              </p>
+                        <button
+                          onClick={async () => {
+                            if (stored?.content) {
+                              setVisibleItinerary(prev => ({
+                                ...prev,
+                                [id]: { ...prev[id], show: !prev[id].show }
+                              }));
+                            } else {
+                              setLoadingItinerary(prev => ({ ...prev, [id]: true }));
+                              const res = await fetch('http://localhost:5000/api/generate-itinerary', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  places: [card.title],
+                                  duration: parseInt(formData.duration),
+                                  mood: formData.mood,
+                                  group: formData.group,
+                                }),
+                              });
+                              const data = await res.json();
+                              setLoadingItinerary(prev => ({ ...prev, [id]: false }));
+                              if (data.itinerary) {
+                                setVisibleItinerary(prev => ({
+                                  ...prev,
+                                  [id]: { show: true, content: data.itinerary }
+                                }));
+                              }
+                            }
+                          }}
+                          className="styled-button px-4 py-3 text-xs font-semibold mt-4"
+                        >
+                          {loadingItinerary[id] ? (
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            stored?.show ? 'Hide Itinerary' : 'Show Itinerary'
+                          )}
+                        </button>
+                      </div>
+                    </div>
 
-              <p className="text-sm text-white/80 mb-2">
-                <strong>Best Months:</strong> {card.best_months}
-              </p>
-
-            <button
-  onClick={async () => {
-    if (stored?.content) {
-      setVisibleItinerary(prev => ({
-        ...prev,
-        [id]: { ...prev[id], show: !prev[id].show }
-      }));
-    } else {
-      setLoadingItinerary(prev => ({ ...prev, [id]: true }));
-      const res = await fetch('http://localhost:5000/api/generate-itinerary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          places: [card.title],
-          duration:parseInt(formData.duration) ,
-          mood: formData.mood,
-          group: formData.group,
-        }),
-      });
-      const data = await res.json();
-      setLoadingItinerary(prev => ({ ...prev, [id]: false }));
-      if (data.itinerary) {
-        setVisibleItinerary(prev => ({
-          ...prev,
-          [id]: { show: true, content: data.itinerary }
-        }));
-      }
-    }
-  }}
-  className="styled-button px-4 py-3 text-xs font-semibold mt-4"  
->
-  {loadingItinerary[id] ? (
-    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-  ) : (
-    stored?.show ? 'Hide Itinerary' : 'Show Itinerary'
-  )}
-</button>
-            </div>
-          </div>
-
-          {stored?.show && (
-            <div className="mt-0 px-6 pb-6">
-              <div
-                className="p-4 rounded-lg bg-blue-950/50 border border-blue-400 text-sm"
-                dangerouslySetInnerHTML={{ __html: formatItinerary(stored.content) }}
-              />
+                    {stored?.show && (
+                      <div className="mt-0 px-6 pb-6">
+                        <div
+                          className="p-4 rounded-lg bg-blue-950/50 border border-blue-400 text-sm"
+                          dangerouslySetInnerHTML={{ __html: formatItinerary(stored.content) }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
-        </div>
-      );
-    })}
-  </div>
-
-  
-)}
-
         </main>
       </div>
 
