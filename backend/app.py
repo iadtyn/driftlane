@@ -13,7 +13,7 @@ CORS(
     resources={r"/api/*": {
         "origins": [
             "http://localhost:3000",                 # for local dev
-            "https://driftline-puce.vercel.app"      # for Vercel prod
+            "https://driftlane.vercel.app"      # for Vercel prod
         ],
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type"],
