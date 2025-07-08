@@ -9,7 +9,7 @@ const prompt = Prompt({
 });
 
 export const metadata = {
-  title: 'Driftline',
+  title: 'Driftlane',
   description: 'Personalized adventure recommendations powered by AI',
 };
 
