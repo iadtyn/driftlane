@@ -7,7 +7,7 @@ Driftlane is a full-stack web application that recommends personalized camping a
 ## 🔥 Live Demo
 
 🌐 [Frontend on Vercel](https://Driftlane.vercel.app/)  
-🔗 [Backend on Render](https://Driftlane.onrender.com/)
+🔗 [Backend on Render](https://Driftline.onrender.com/)
 
 ---
 
