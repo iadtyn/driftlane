@@ -125,11 +125,11 @@ export default function Explore() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="logo.png"
-              alt="Driftline Logo"
+              alt="Driftlane Logo"
               className="w-15 h-15 object-contain text-focus-in"
             />
             <h1 className="text-5xl bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text drop-shadow font-bold text-focus-in">
-              Driftline
+              Driftlane
             </h1>
           </div>
           <p className="text-white/80 text-lg mt-2 font-light max-w-2xl mx-auto text-focus-in">
@@ -346,7 +346,7 @@ export default function Explore() {
       </div>
 
       <footer className="text-center py-3 bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text mb-2 text-focus-in">
-        © {currentYear} DriftLine . All Rights Reserved.
+        © {currentYear} DriftLane . All Rights Reserved.
       </footer>
     </div>
   );
