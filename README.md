@@ -1,20 +1,20 @@
-# Driftline 🏕️🗺️
+# Driftlane 🏕️🗺️
 
 **AI-Powered Adventure Recommender & Itinerary Generator**
 
-Driftline is a full-stack web application that recommends personalized camping and trekking experiences across India based on your mood, budget, group type, and preferences. It uses machine learning and LLMs to suggest destinations and dynamically generate travel itineraries.
+Driftlane is a full-stack web application that recommends personalized camping and trekking experiences across India based on your mood, budget, group type, and preferences. It uses machine learning and LLMs to suggest destinations and dynamically generate travel itineraries.
 
 ## 🔥 Live Demo
 
-🌐 [Frontend on Vercel](https://driftline-puce.vercel.app/)  
-🔗 [Backend on Render](https://driftline.onrender.com/)
+🌐 [Frontend on Vercel](https://Driftlane.vercel.app/)  
+🔗 [Backend on Render](https://Driftline.onrender.com/)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-driftline/
+Driftlane/
 ├── backend/
 │   ├── app.py
 │   ├── train_models.py
@@ -64,8 +64,8 @@ driftline/
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/omkarr10/driftline
-cd driftline
+git clone https://github.com/omkarr10/Driftlane
+cd Driftlane
 ```
 
 ### 2. Backend Setup
