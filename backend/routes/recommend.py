@@ -89,10 +89,6 @@ def fetch_images(base_destination, validated_state):
     if not images:
         images = fetch_images_from_searx(query)
 
-    # Fallback to Brave
-    if not images:
-        images = fetch_images_from_brave(query)
-
     image_cache[key] = images
     return images
 
