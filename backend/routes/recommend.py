@@ -13,17 +13,14 @@ DATA_PATH = 'data/itinerary.csv'
 MOOD_LOG = 'data/user_moods.csv'
 MODEL_DIR = 'models'
 
-# Load dataset
 df = pd.read_csv(DATA_PATH)
 df['combined_moods'] = df['mood_tags'].fillna('').astype(str)
-
-# Load vectorizer and KNN model
 vectorizer = pickle.load(open(f"{MODEL_DIR}/tfidf_vectorizer.pkl", "rb"))
 knn_model = pickle.load(open(f"{MODEL_DIR}/recommender_knn.pkl", "rb"))
 
-# === Image Cache ===
 image_cache = {}
 
+# === Wikipedia Primary Image Source ===
 def strict_wiki_place_title(query):
     try:
         res = requests.get("https://en.wikipedia.org/w/api.php", params={
@@ -33,17 +30,17 @@ def strict_wiki_place_title(query):
         for r in results:
             title = r.get("title", "").lower()
             snippet = r.get("snippet", "").lower()
-            if "disambiguation" not in title and any(k in snippet for k in ["village", "city", "town", "located in", "state of"]):
+            if "disambiguation" not in title and any(k in snippet for k in ["village", "city", "town", "located", "state"]):
                 return r["title"]
         return results[0]["title"] if results else query
     except:
         return query
 
-def fetch_image_from_wikipedia(destination):
+def fetch_image_from_wikipedia(title):
     try:
         res = requests.get("https://en.wikipedia.org/w/api.php", params={
             "action": "query", "format": "json", "prop": "pageimages",
-            "titles": destination, "piprop": "original"
+            "titles": title, "piprop": "original"
         }, timeout=5)
         pages = res.json().get("query", {}).get("pages", {})
         for p in pages.values():
@@ -53,17 +50,53 @@ def fetch_image_from_wikipedia(destination):
     except:
         return []
 
+# === SearxNG Fallback ===
+def fetch_images_from_searx(query):
+    try:
+        url = "https://baresearch.org/search"
+        params = {
+            "q": query,
+            "categories": "images",
+            "format": "json"
+        }
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+        print(f"🔎 SearxNG image search: {query}")
+        res = requests.get(url, headers=headers, params=params, timeout=5)
+        if res.status_code != 200:
+            print(f"❌ SearxNG status: {res.status_code}")
+            return []
+        data = res.json()
+        return [{"url": item["img_src"], "source": "searx"} for item in data if "img_src" in item][:4]
+    except Exception as e:
+        print("❌ SearxNG failed:", e)
+        return []
+
+# === Image Fetch Controller ===
 def fetch_images(base_destination, validated_state):
     key = f"{base_destination}-{validated_state}".lower()
     if key in image_cache:
         return image_cache[key]
-    
-    title = strict_wiki_place_title(f"{base_destination} {validated_state}")
+
+    query = f"{base_destination} {validated_state}"
+    title = strict_wiki_place_title(query)
+
+    # Try Wiki
     images = fetch_image_from_wikipedia(title)
+
+    # Fallback to Searx
+    if not images:
+        images = fetch_images_from_searx(query)
+
+    # Fallback to Brave
+    if not images:
+        images = fetch_images_from_brave(query)
+
     image_cache[key] = images
     return images
 
-# === Recommendation Route ===
+# === Main Recommend Route ===
 @recommend_bp.route("/recommend", methods=["POST"])
 def recommend():
     data = request.get_json()
@@ -73,7 +106,7 @@ def recommend():
     travel_type = data.get("type", "").strip().lower()
 
     try:
-        # Log mood once
+        # Mood logging
         if not os.path.exists(MOOD_LOG):
             pd.DataFrame(columns=["mood"]).to_csv(MOOD_LOG, index=False)
         mood_df = pd.read_csv(MOOD_LOG)
@@ -81,7 +114,6 @@ def recommend():
             mood_df = pd.concat([mood_df, pd.DataFrame([{"mood": user_mood}])], ignore_index=True)
             mood_df.to_csv(MOOD_LOG, index=False)
 
-        # Recommend
         user_vec = vectorizer.transform([user_mood])
         _, indices = knn_model.kneighbors(user_vec, n_neighbors=30)
         matched = df.iloc[indices[0]]
@@ -97,52 +129,45 @@ def recommend():
             )
 
         valid_rows = [row for _, row in matched.iterrows() if is_valid(row)]
-        
-        def build_recommendation(row):
-            destination_name = row['destination']
-            base_dest = row.get('base_destination', destination_name)
-            validated_state = row.get('validated_state', row.get('state', ''))
-            images = fetch_images(base_dest, validated_state)
 
+        def build_recommendation(row):
+            destination = row['destination']
+            base_dest = row.get('base_destination', destination)
+            state = row.get('validated_state', row.get('state', ''))
             return {
-                "title": destination_name,
-                "state": row['state'],
+                "title": destination,
+                "state": state,
                 "type": row['type'].capitalize(),
                 "groups": [g.strip() for g in str(row['ideal_group']).split(',')],
                 "mood_tags": [m.strip() for m in str(row['mood_tags']).split(',')],
                 "avg_budget_per_day_inr": int(row['avg_budget_per_day_inr']),
                 "best_months": row.get('best_months', 'Any'),
                 "sample_itinerary": [i.strip() for i in str(row['sample_itinerary']).split(',') if i.strip()],
-                "images": images
+                "images": fetch_images(base_dest, state)
             }
 
-        # Parallel image fetch for first 15 valid destinations
         with ThreadPoolExecutor(max_workers=5) as executor:
             recs = list(executor.map(build_recommendation, valid_rows[:15]))
 
         recommendations.extend(recs)
-        for r in recommendations:
-            added_titles.add(r['title'])
+        added_titles.update(r['title'] for r in recs)
 
-        # Fallback if <15: relax only group, keep type strict
+        # Fallback: relax group if still <15
         if len(recommendations) < 15:
             for _, row in matched.iterrows():
+                if row['destination'] in added_titles: continue
+                if travel_type not in str(row['type']).lower(): continue
+                if int(row['avg_budget_per_day_inr']) > budget: continue
                 try:
-                    if row['destination'] in added_titles:
-                        continue
-                    if travel_type not in str(row['type']).lower():
-                        continue
-                    if int(row['avg_budget_per_day_inr']) <= budget:
-                        rec = build_recommendation(row)
-                        recommendations.append(rec)
-                        added_titles.add(row['destination'])
-                    if len(recommendations) >= 15:
-                        break
-                except:
-                    continue
+                    rec = build_recommendation(row)
+                    recommendations.append(rec)
+                    added_titles.add(row['destination'])
+                except: continue
+                if len(recommendations) >= 15:
+                    break
 
         return jsonify(sorted(recommendations, key=lambda x: x['avg_budget_per_day_inr']))
 
     except Exception as e:
-        print(f" Failed to recommend: {e}")
+        print("❌ Failed to recommend:", e)
         return jsonify({"error": str(e)}), 500
