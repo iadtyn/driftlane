@@ -62,15 +62,15 @@ def fetch_images_from_searx(query):
         headers = {
             "User-Agent": "Mozilla/5.0"
         }
-        print(f"🔎 SearxNG image search: {query}")
+        print(f"SearxNG image search: {query}")
         res = requests.get(url, headers=headers, params=params, timeout=5)
         if res.status_code != 200:
-            print(f"❌ SearxNG status: {res.status_code}")
+            print(f"SearxNG status: {res.status_code}")
             return []
         data = res.json()
         return [{"url": item["img_src"], "source": "searx"} for item in data if "img_src" in item][:4]
     except Exception as e:
-        print("❌ SearxNG failed:", e)
+        print("SearxNG failed:", e)
         return []
 
 # === Image Fetch Controller ===
@@ -169,5 +169,5 @@ def recommend():
         return jsonify(sorted(recommendations, key=lambda x: x['avg_budget_per_day_inr']))
 
     except Exception as e:
-        print("❌ Failed to recommend:", e)
+        print("Failed to recommend:", e)
         return jsonify({"error": str(e)}), 500
