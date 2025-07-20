@@ -4,7 +4,7 @@
 
 Driftlane is a full-stack web application that recommends personalized camping and trekking experiences across India based on your mood, budget, group type, and preferences. It uses machine learning and LLMs to suggest destinations and dynamically generate travel itineraries.
 
-## 🔥 Live Demo
+## 📍 Live Site
 
 🌐 [Frontend on Vercel](https://Driftlane.vercel.app/)  
 🔗 [Backend on Render](https://Driftline.onrender.com/)
