@@ -346,7 +346,7 @@ export default function Explore() {
       </div>
 
       <footer className="text-center py-3 bg-gradient-to-b from-[#FFD475] via-[#D98C3C] to-[#7A858A] text-transparent bg-clip-text mb-2 text-focus-in">
-        © {currentYear} DriftLane . All Rights Reserved.
+        © {currentYear} Driftlane. All Rights Reserved.
       </footer>
     </div>
   );
